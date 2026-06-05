@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Farmer Login</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(120deg,#2e7d32,#66bb6a);
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* Glass login box */
+.box{
+width:320px;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(12px);
+padding:30px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+animation:fadeIn 1s ease;
+}
+
+/* Animation */
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* Farmer image */
+.farmer-img{
+width:90px;
+margin-bottom:10px;
+animation:float 3s infinite ease-in-out;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-8px)}
+100%{transform:translateY(0)}
+}
+
+h2{
+color:white;
+margin-bottom:15px;
+}
+
+/* Inputs */
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+outline:none;
+font-size:14px;
+}
+
+/* Button */
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:white;
+color:#2e7d32;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+background:#e8f5e9;
+}
+
+/* Signup link */
+a{
+color:white;
+text-decoration:none;
+font-size:14px;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<img src="https://cdn-icons-png.flaticon.com/512/2909/2909765.png" class="farmer-img">
+
+<h2>Smart Farmer Login</h2>
+
+<form action="/login" method="POST">
+<input type="email" name="email" placeholder="Email" required>
+<input type="password" name="password" placeholder="Password" required>
+<button type="submit">Login</button>
+</form>
+
+<br>
+<a href="/signup">Create Account</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Farmer Dashboard</title>
+
+<style>
+body{
+font-family:Arial;
+margin:0;
+}
+
+.bg{
+background-image:url("https://images.unsplash.com/photo-1560493676-04071c5f467b");
+background-size:cover;
+background-position:center;
+min-height:100vh;
+}
+
+.overlay{
+background:rgba(0,0,0,0.6);
+min-height:100vh;
+}
+
+.nav{
+background:#2e7d32;
+color:white;
+padding:18px;
+text-align:center;
+font-size:26px;
+font-weight:bold;
+position:relative;
+}
+
+.logout{
+position:absolute;
+right:20px;
+top:15px;
+background:white;
+color:#2e7d32;
+padding:8px 15px;
+border-radius:6px;
+text-decoration:none;
+font-size:14px;
+font-weight:bold;
+}
+
+.logout:hover{
+background:#e8f5e9;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:12px;
+width:400px;
+margin:50px auto;
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:15px;
+background:#2e7d32;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.lang{
+position:absolute;
+right:120px;
+top:15px;
+padding:6px;
+border-radius:6px;
+border:none;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+<div class="overlay">
+
+<div class="nav">
+<span id="title">🌾 Farmer Market Place</span>
+
+<select class="lang" onchange="changeLang(this.value)">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="mr">Marathi</option>
+<option value="gu">Gujarati</option>
+</select>
+
+<a href="/logout" class="logout">Sign Out</a>
+</div>
+
+<div class="card">
+
+<h3 id="addcrop">Add Crop</h3>
+
+<form action="/add" method="POST" enctype="multipart/form-data">
+
+<input type="text" name="name" placeholder="Crop Name" required>
+
+<input type="number" id="price" name="price" placeholder="Price" required>
+
+<!-- STEP 1: Camera -->
+<input type="file" name="image" accept="image/*" capture="environment" required>
+
+<!-- STEP 2: GPS hidden fields -->
+<input type="hidden" name="lat" id="lat">
+<input type="hidden" name="lng" id="lng">
+
+<textarea name="description" placeholder="Enter Crop Description"></textarea>
+
+<button id="upload" type="submit">Upload</button>
+
+</form>
+
+</div>
+
+</div>
+</div>
+
+<!-- 🔥 STEP 3: GPS SCRIPT (YAHI IMPORTANT HAI) -->
+<script>
+navigator.geolocation.getCurrentPosition(function(pos){
+    document.getElementById("lat").value = pos.coords.latitude;
+    document.getElementById("lng").value = pos.coords.longitude;
+}, function(error){
+    console.log("Location error:", error);
+});
+</script>
+
+<!-- Language Script -->
+<script>
+function changeLang(lang){
+
+if(lang == "hi"){
+document.getElementById("title").innerHTML = "किसान मार्केट प्लेस";
+document.getElementById("addcrop").innerHTML = "फसल जोड़ें";
+document.getElementById("price").placeholder = "भाव";
+document.getElementById("upload").innerHTML = "अपलोड करें";
+}
+
+if(lang == "mr"){
+document.getElementById("title").innerHTML = "शेतकरी मार्केट प्लेस";
+document.getElementById("addcrop").innerHTML = "पीक जोडा";
+document.getElementById("price").placeholder = "भाव";
+document.getElementById("upload").innerHTML = "अपलोड करा";
+}
+
+if(lang == "en"){
+document.getElementById("title").innerHTML = "Farmer Market Place";
+document.getElementById("addcrop").innerHTML = "Add Crop";
+document.getElementById("price").placeholder = "Price";
+document.getElementById("upload").innerHTML = "Upload";
+}
+
+if(lang == "gu"){
+document.getElementById("title").innerHTML = "ખેડૂત માર્કેટ પ્લેસ";
+document.getElementById("addcrop").innerHTML = "પાક ઉમેરો";
+document.getElementById("price").placeholder = "ભાવ";
+document.getElementById("upload").innerHTML = "અપલોડ કરો";
+}
+
+}
+</script>
+
+</body>
+</html>

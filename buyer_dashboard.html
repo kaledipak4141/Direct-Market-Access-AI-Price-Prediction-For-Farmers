@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Buyer Marketplace</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+margin:0;
+}
+
+/* Navbar */
+.nav{
+background:#1976d2;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+/* Grid */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+padding:25px;
+}
+
+/* Product card */
+.product{
+background:white;
+padding:15px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 5px 12px rgba(0,0,0,0.15);
+transition:0.3s;
+}
+
+.product:hover{
+transform:scale(1.03);
+}
+
+/* Image */
+.product img{
+width:100%;
+height:160px;
+object-fit:cover;
+border-radius:8px;
+}
+
+/* Buttons */
+.btn{
+padding:10px;
+border:none;
+border-radius:8px;
+margin-top:10px;
+cursor:pointer;
+width:100%;
+font-weight:bold;
+}
+
+.buy{
+background:#4caf50;
+color:white;
+}
+
+.chat{
+background:#ff9800;
+color:white;
+}
+
+/* Description */
+.desc{
+font-size:14px;
+color:#555;
+margin-top:8px;
+}
+
+/* Chat Box */
+#chatBox{
+display:none;
+position:fixed;
+bottom:20px;
+right:20px;
+width:300px;
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="nav">Buyer Marketplace</div>
+
+<div class="grid" id="products"></div>
+
+<!-- 🔥 CHAT BOX -->
+<div id="chatBox">
+<h4>Chat with Farmer</h4>
+
+<input type="text" id="msg" placeholder="Type message" style="width:100%; padding:8px;">
+<br><br>
+
+<button onclick="sendMessage()" style="width:100%; padding:8px;">Send</button>
+
+<div id="messages" style="margin-top:10px;"></div>
+
+</div>
+
+<script>
+
+// ---------------- LOAD PRODUCTS ----------------
+fetch('/products')
+.then(res=>res.json())
+.then(data=>{
+
+let box = document.getElementById("products");
+box.innerHTML = "";
+
+data.forEach(p=>{
+box.innerHTML += `
+<div class="product">
+<img src="/static/uploads/${p.image}">
+<h3>${p.name}</h3>
+<p>Farmer Price: ₹${p.price}</p>
+<p>AI Price: ₹${p.ai_price}</p>
+<p class="desc">${p.description}</p>
+
+<p><b>Farmer:</b> ${p.farmer_name}</p>
+<p><b>Address:</b> ${p.farmer_address}</p>
+#---------------- GOOGLE MAPS ----------------
+<iframe 
+width="100%" 
+height="200" 
+style="border:0; margin-top:10px;"
+loading="lazy"
+allowfullscreen
+src="https://maps.google.com/maps?q=${p.lat},${p.lng}&z=15&output=embed">
+</iframe>
+
+<button class="btn buy" onclick="buyProduct('${p.name}','${p.price}')">Buy Now</button>
+
+<button class="btn chat" onclick="window.location.href='/chat'">
+Chat with Farmer
+</button>
+
+</div>
+`;
+});
+
+});
+
+// ---------------- BUY ----------------
+function buyProduct(name, price){
+
+let option = confirm("Pay ₹" + price + " using Online Payment?");
+
+if(option){
+
+fetch("/buy",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+product:name,
+price:price
+})
+})
+.then(res=>res.json())
+.then(data=>{
+let upi = prompt("Enter your UPI ID (example: abc@upi)");
+
+if(upi){
+alert("Payment request sent to " + upi + "\nAmount: ₹" + price);
+}
+
+alert("Order placed by: " + data.user);
+});
+
+}
+}
+
+// ---------------- CHAT OPEN ----------------
+function openChat(){
+document.getElementById("chatBox").style.display = "block";
+}
+
+// ---------------- SEND MESSAGE ----------------
+function sendMessage(){
+
+let msg = document.getElementById("msg").value;
+
+fetch("/send_message",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:msg})
+})
+.then(res=>res.json())
+.then(data=>{
+alert("Message Sent");
+});
+
+}
+
+</script>
+
+</body>
+</html>
